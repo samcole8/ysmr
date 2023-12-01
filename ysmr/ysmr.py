@@ -1,4 +1,6 @@
 import datetime
+import requests
+import importlib
 
 import helpers
 
@@ -22,7 +24,6 @@ def parse(ssh_log):
     for line in ssh_log_chron:
         # If line is relevant:
         if "password" in line:
-            print(line)
             # Set payload values
             if "Accepted" in line:
                 payload_type = "1"
@@ -42,14 +43,28 @@ def parse(ssh_log):
             break
     return payload
 
+def post(url, params):
+    post = requests.post(url, params=params)
+    print(post)
+
 def ysmr():
     """Parse SSH log for latest data and post to API."""
     absolute_path = helpers.get_path()
-    config = helpers.load_json(CONFIG)
+    config = helpers.load_json(absolute_path / CONFIG)
     # Open log and parse for data.
     with open(absolute_path / config["ssh_log_path"]) as ssh_log:
         payload = parse(ssh_log)
-    print(payload)
+    # Post API call for each module
+    for module in config["modules"]:
+        # If module is active
+        if config["modules"][module] == "1":
+            temp_module = importlib.import_module("modules." + module)
+            call_list = temp_module.wrap(payload)
+            for call in call_list:
+                url = call[0]
+                params = call[1]
+                post(url, params)
+
 
 if __name__ == "__main__":
     ysmr()
