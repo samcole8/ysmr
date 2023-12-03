@@ -10,3 +10,8 @@ def load_json(path):
 def get_path():
     """Return absolute file path"""
     return Path(__file__).parent
+
+def convert_to_text(payload):
+    if payload["type"] == "1":
+        return f"Accepted login for '{payload['name']}' from {payload['ipv4']} ({payload['hour']}:{payload['minute']}:{payload['second']})"
+    return f"Rejected login for '{payload['name']}' from {payload['ipv4']} ({payload['hour']}:{payload['minute']}:{payload['second']})"
