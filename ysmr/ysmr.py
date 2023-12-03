@@ -53,13 +53,15 @@ def ysmr():
     config = helpers.load_json(absolute_path / CONFIG)
     # Open log and parse for data.
     with open(absolute_path / config["ssh_log_path"]) as ssh_log:
-        payload = parse(ssh_log)
-    # Post API call for each module
+        ssh_log = ssh_log.readlines()
+    payload = parse(ssh_log)
+    # Post API call for each active module.
     for module in config["modules"]:
-        # If module is active
         if config["modules"][module] == "1":
+            # Import modules temporarily to get API calls.
             temp_module = importlib.import_module("modules." + module)
             call_list = temp_module.wrap(payload)
+            # Post API calls.
             for call in call_list:
                 url = call[0]
                 params = call[1]
