@@ -8,19 +8,8 @@ CONFIG = "ysmr.conf" # Relative path to config
 
 def parse(ssh_log):
     """Filter SSH log for relevant data."""
-    # Define payload template
-    payload = {
-        "type":"",
-        "year":"",
-        "day":"",
-        "hour":"",
-        "minute":"",
-        "second":"",
-        "ipv4":"",
-        "name":"",
-        "port":""
-    }
-    ssh_log_chron = reversed(ssh_log.readlines()) # Make log iterable in chronological order
+    payload = {}
+    ssh_log_chron = reversed(ssh_log) # Make log iterable in chronological order
     for line in ssh_log_chron:
         # If line is relevant:
         if "password" in line:
@@ -59,7 +48,7 @@ def ysmr():
     for module in config["modules"]:
         if config["modules"][module] == "1":
             # Import modules temporarily to get API calls.
-            temp_module = importlib.import_module("modules." + module)
+            temp_module = importlib.import_module("modules." + module) 
             call_list = temp_module.wrap(payload)
             # Post API calls.
             for call in call_list:
