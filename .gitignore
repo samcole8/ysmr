@@ -1,5 +1,6 @@
 # Config files
 *.conf
+ysmr.md
 
 # Log files
 *.log
