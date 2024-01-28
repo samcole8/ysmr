@@ -1,6 +1,12 @@
 import json
 from pathlib import Path
 import toml
+import datetime
+
+def log(config, message):
+    if config["ysmr"]["log"] == True:
+        with open("ysmr.log", "a") as log:
+            log.write(str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " " + message + "\n")
 
 def load_toml(path):
     """Open TOML file and return dictionary"""
@@ -17,8 +23,3 @@ def load_json(path):
 def get_path():
     """Return absolute file path"""
     return Path(__file__).parent
-
-def convert_to_text(payload):
-    if payload["type"] == "1":
-        return f"Accepted login for '{payload['name']}' from {payload['ipv4']} ({payload['hour']}:{payload['minute']}:{payload['second']})"
-    return f"Rejected login for '{payload['name']}' from {payload['ipv4']} ({payload['hour']}:{payload['minute']}:{payload['second']})"

@@ -1,6 +1,5 @@
 [ysmr]
 enabled = true
-log = true
 
     [ysmr.payload]
     # Notification configuration
@@ -14,7 +13,9 @@ log = true
         [module.tele.endpoint]
         # Format: ["id","token"]
         # Example: ["d98sad9sa","dishaklaspd"]
-        default = ["6894462037", "6738537212:AAGD_WDMh3fupWElH3Bgv14CYjqV_GcNDMM"]
+        default = ["", ""]
+        default2 = ["", "hello"]
+
 
     [module.mongo]
     enabled = false

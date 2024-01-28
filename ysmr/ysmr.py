@@ -1,46 +1,48 @@
 import requests
-import importlib
-from elasticsearch import Elasticsearch
+from importlib import import_module
+import sys
 
 import helpers
 
-CONFIG = "ysmr.conf" # Relative path to config
+CONFIG = "ysmr.toml" # Relative path to config
 
-def post(url, params):
-    post = requests.post(url, params=params)
-    print(post)
+def get_payload():
+    """Get payload from command line arguments"""
+    return (ip:=str(sys.argv[1]),
+            port:=int(sys.argv[2]),
+            status:=int(sys.argv[3]))
 
-def fetch(port, host, index):
-    es = Elasticsearch(f"{host}:{port}")
-    query = {
-        "query": {
-            "match_all": {}
-        }
-    }
-    result = es.search(index=index, body=query)
-    for hit in result['hits']['hits']:
-        print(hit['_source'])
-    es.close()
+def post(calls):
+    """Post API calls"""
+    if len(calls) != 0:
+        for call in calls:
+            post = requests.post(call[0], params=call[1])
+        
+    else:
+        print("No calls were sent. Are any modules loaded?")
 
+def call_gen(config, payload):
+    """Generate API calls from payload"""
+    calls = []
+    # For every module in config file
+    for mod_name, mod_config in config["module"].items():
+        if mod_config["enabled"] is True:
+            mod = import_module("module." + mod_name)
+            for endpoint in mod_config["endpoint"].values():
+                calls += mod.wrap(endpoint, payload)
+    return calls
 
 def ysmr():
-    """Parse SSH log for latest data and post to API."""
+    """Craft and post API calls."""
+    # Get absolute path and load config file
     absolute_path = helpers.get_path()
-    config = helpers.load_json(absolute_path / CONFIG)
-    # Open log and get data
-    fetch(config["port"], config["host"], config["index"])
-    # Post API call for each active module.
-#    for module in config["modules"]:
-#        if config["modules"][module] == "1":
-#            # Import modules temporarily to get API calls.
-#            temp_module = importlib.import_module("modules." + module)
-#            call_list = temp_module.wrap(payload)
-#            # Post API calls.
-#            for call in call_list:
-#                url = call[0]
-#                params = call[1]
-#                post(url, params)
-
+    config = helpers.load_toml(absolute_path / CONFIG)
+    payload = get_payload()
+    if config["ysmr"]["enabled"] is True:
+        calls = call_gen(config, payload)
+        post(calls)
+    else:
+        print("[ysmr]: Script is disabled.")
 
 if __name__ == "__main__":
     ysmr()
