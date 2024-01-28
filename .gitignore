@@ -1,5 +1,5 @@
 # Config files
-*.conf
+ysmr.toml
 ysmr.md
 
 # Log files
