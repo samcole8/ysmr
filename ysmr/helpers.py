@@ -1,5 +1,12 @@
 import json
 from pathlib import Path
+import toml
+
+def load_toml(path):
+    """Open TOML file and return dictionary"""
+    with open(path, "r") as toml_file:
+        toml_dict = toml.load(toml_file)
+    return toml_dict
 
 def load_json(path):
     """Open JSON file and return dictionary"""
