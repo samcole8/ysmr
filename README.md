@@ -1,5 +1,7 @@
 # ysmr
 
+![](https://img.shields.io/badge/status-under%20development-orange)
+
 Modular notification system for Logstash.
 
 ## Installation
