@@ -12,7 +12,7 @@ bot_token=""
 
 [[module]]
 name="sendgrid"
-enabled="false"
+enabled=false
 account_sid = ""
 auth_token = ""
 from = ""
@@ -20,7 +20,7 @@ to = ""
 
 [[module]]
 name="smtp"
-enabled="false"
+enabled=true
 server = ""
 port = ""
 login = ""
