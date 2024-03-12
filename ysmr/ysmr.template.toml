@@ -1,7 +1,11 @@
 # ysmr.toml
 
 [[module]]
+name="log"
+enabled="true"
+
+[[module]]
 name="tele"
-enabled=true
+enabled=false
 chat_id=""
 bot_token=""
