@@ -9,3 +9,21 @@ name="tele"
 enabled=false
 chat_id=""
 bot_token=""
+
+[[module]]
+name="sendgrid"
+enabled="false"
+account_sid = ""
+auth_token = ""
+from = ""
+to = ""
+
+[[module]]
+name="smtp"
+enabled="false"
+server = ""
+port = ""
+login = ""
+secret = ""
+to = ""
+from = ""
