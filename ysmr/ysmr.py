@@ -12,9 +12,10 @@ def load_config():
         config = toml.load(f)
     return config
 
-def ysmr():
+def yssh(time, status, ipv4, port):
     """Pass parameters to notification modules."""
     config = load_config()
 
+
 if __name__ == "__main__":
-    ysmr()
+    yssh(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[4])
