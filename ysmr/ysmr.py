@@ -6,16 +6,23 @@ import sys
 # Relative path to configuration file
 CONFIG_PATH = "ysmr.toml"
 
+class Module:
+    def __init__(self, name, enabled, **kwargs):
+        self.name = name
+        self.enabled = enabled
+        self.settings = kwargs
+
 def load_config():
     """Open config and return dictionary"""
     with open(CONFIG_PATH, "r") as f:
         config = toml.load(f)
     return config
 
-def yssh(time, status, ipv4, port):
+def ysmr(timestamp, status, ipv4, port):
     """Pass parameters to notification modules."""
     config = load_config()
-
+    # Create list of Module instances
+    modules = [Module(**module) for module in config.get('module', [])]
 
 if __name__ == "__main__":
-    yssh(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[4])
+    ysmr(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[4])
