@@ -12,9 +12,8 @@ class Log:
         self.timestamp = timestamp
         self.other = kwargs
 
-class SSHLog(Log):  # SSHLog inherits from Log
+class SSHLog(Log):
     def __init__(self, status, ipv4, port, **kwargs):
-        # Call the __init__ method of the base class (Log) using super()
         super().__init__(**kwargs)
         self.status = status
         self.ipv4 = ipv4
@@ -43,4 +42,4 @@ def ysmr(timestamp, status, ipv4, port):
         
 
 if __name__ == "__main__":
-    ysmr(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[4])
+    ysmr(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
