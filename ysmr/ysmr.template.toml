@@ -15,8 +15,8 @@ name="sendgrid"
 enabled=false
 account_sid = ""
 auth_token = ""
-from = ""
-to = ""
+sender = ""
+recipient = ""
 
 [[module]]
 name="smtp"

@@ -6,8 +6,8 @@ def run(settings, log):
     message = client.messages \
                     .create(
                         body=msg,
-                        from_=settings["from"],
-                        to=settings["to"]
+                        from_=settings["sender"],
+                        to=settings["recipient"]
                     )
     # Send SMS
     print(message.sid)
