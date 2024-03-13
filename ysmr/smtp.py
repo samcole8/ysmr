@@ -1,4 +1,5 @@
-import smtplib, ssl
+import smtplib
+import ssl
 from email.mime.text import MIMEText
 
 def run(conf, log):
