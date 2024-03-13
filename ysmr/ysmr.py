@@ -11,14 +11,20 @@ import toml
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            "ysmr.toml")
 
-class ModuleConfig:
-    """Module configuration class."""
+class Config:
+    """Config class."""
 
-    def __init__(self, name, enabled, **kwargs):
-        self.name = name
-        self.enabled = enabled
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+    def __init__(self):
+        self.modules = []
+
+    class Module:
+        """Module configuration class."""
+
+        def __init__(self, name, enabled, **kwargs):
+            self.name = name
+            self.enabled = enabled
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
 class Log:
     """Template log class."""
@@ -63,27 +69,29 @@ class SSHLog(Log):
 def load_config(path):
     """Open config and return object list."""
     with open(path) as f:
-        # Create list of enabled Module instances
-        module_configs = [
-            ModuleConfig(**module_config)
-            for module_config in toml.load(f).get('module', [])
-            if module_config.get('enabled', False)
+        # Create config object
+        config = Config()
+        # Create config module objects
+        config.modules = [
+            config.Module(**module)
+            for module in toml.load(f).get('module', [])
+            if module.get('enabled', False)
         ]
-    return module_configs
+    return config
 
 def ysmr(timestamp, status, ipv4, port):
     """Pass parameters to notification modules."""
     # Create SSHLog object
     log = SSHLog(timestamp=timestamp, status=status, ipv4=ipv4, port=port)
     # Load config objects
-    module_configs = load_config(CONFIG_PATH)
+    config = load_config(CONFIG_PATH)
     # Run module, pass config & log
-    for module_config in module_configs:
-        module = importlib.import_module(module_config.name)
+    for module in config.modules:
+        importlib_module = importlib.import_module(module.name)
         try:
-            module.run(module_config, log)
+            importlib_module.run(module, log)
         except Exception as e:
-            print(f"ERROR: Exception occured in {module_config.name} module:"
+            print(f"ERROR: Exception occured in {module.name} module:"
                   f"\n{e}")
 
 def parse():
