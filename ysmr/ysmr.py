@@ -32,8 +32,6 @@ class Log:
     def __init__(self, timestamp=None, **kwargs):
         self.timestamp = timestamp
         self.other = kwargs
-    
-
 
 class SSHLog(Log):
     """SSH log child class."""
