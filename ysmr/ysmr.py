@@ -29,15 +29,18 @@ class Config:
 class Log:
     """Template log class."""
 
-    def __init__(self, timestamp, **kwargs):
+    def __init__(self, timestamp=None, **kwargs):
         self.timestamp = timestamp
         self.other = kwargs
+    
+
 
 class SSHLog(Log):
     """SSH log child class."""
 
     def __init__(self, status=None, ipv4=None, port=None, **kwargs):
         super().__init__(**kwargs)
+        self.type = "ssh"
         self.status = status
         self.ipv4 = ipv4
         self.port = port
@@ -57,6 +60,10 @@ class SSHLog(Log):
         # Add port to message
         if self.port:
             message_parts.append(f"on port {self.port}")
+
+        # Add port to message
+        if self.timestamp:
+            message_parts.append(f"at {self.timestamp}")
 
         # Construct final message
         if message_parts:
@@ -79,10 +86,8 @@ def load_config(path):
         ]
     return config
 
-def ysmr(timestamp, status, ipv4, port):
+def ysmr(log):
     """Pass parameters to notification modules."""
-    # Create SSHLog object
-    log = SSHLog(timestamp=timestamp, status=status, ipv4=ipv4, port=port)
     # Load config objects
     config = load_config(CONFIG_PATH)
     # Run module, pass config & log
@@ -95,41 +100,51 @@ def ysmr(timestamp, status, ipv4, port):
                   f"\n{e}")
 
 def parse():
-    """Use argparse to parse command-line arguments."""
-    # Create ArgumentParser object
-    parser = argparse.ArgumentParser(description='Process some strings.')
+    """Use argparse to parse command-line arguments.
 
-    # Add timestamp argument
-    parser.add_argument("timestamp", type=str,
-                        help="timestamp string")
+    Create log object from CLI arguments.
+    """
+    # Create parsers
+    parser = argparse.ArgumentParser(description='Process arguments.')
+    subparsers = parser.add_subparsers(title='functions', dest='subcommand')
+    ssh_parser = subparsers.add_parser('ssh', help='SSH authentication notification')
 
-    # SSH group
-    ssh_group = parser.add_argument_group("SSH options")
-    # Set args
-    ssh_arguments = {
-        "--ssh": {"action": "store_true",
-                  "help": "specify SSH log type"},
-        "--status": {"type": str,
-                     "default": "",
-                     "help": "status string (required for SSH)"},
-        "--ipv4": {"type": str,
-                   "default": "",
-                   "help": "IPv4 address string (required for SSH)"},
-        "--port": {"type": str,
-                   "default": "",
-                   "help": "port string (required for SSH)"}
-    }
-    # Add arguments
-    for arg, config in ssh_arguments.items():
-        ssh_group.add_argument(arg, **config)
+    # Optional arguments for SSH
+    ssh_parser.add_argument("--timestamp",
+                            type=str,
+                            default=None,
+                            help="specify timestamp")
+    ssh_parser.add_argument("--status",
+                            type=str,
+                            default=None,
+                            help="specify status")
+    ssh_parser.add_argument("--ipv4",
+                            type=str,
+                            default=None,
+                            help="specify IPv4 address")
+    ssh_parser.add_argument("--port",
+                            type=str,
+                            default=None,
+                            help="specify port number")
 
     # Parse arguments
     args = parser.parse_args()
 
-    return args.timestamp, args.status, args.ipv4, args.port
+    # Check if subcommand is provided and handle accordingly
+    if args.subcommand == 'ssh':
+        # Create SSHLog object using provided arguments
+        log = SSHLog(timestamp=args.timestamp,
+                     status=args.status,
+                     ipv4=args.ipv4,
+                     port=args.port)
+    else:
+        sys.exit("ysmr.py: error: Log type is invalid or not specified")
+
+    # Return log object
+    return log
 
 if __name__ == "__main__":
     # Add directory containing this script to the Python module search path
     script_dir = os.path.dirname(os.path.realpath(__file__))
     sys.path.append(script_dir)
-    ysmr(*parse())
+    ysmr(parse())
