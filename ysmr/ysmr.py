@@ -75,7 +75,8 @@ def parse():
     ssh_group = parser.add_argument_group("SSH options")
     # Set args
     ssh_arguments = {
-        "--ssh": {"action": "store_true", "help": "enable SSH options"},
+        "--ssh": {"action": "store_true",
+                  "help": "enable SSH options"},
         "--status": {"type": str,
                      "default": "",
                      "help": "status string (required for SSH)"},
