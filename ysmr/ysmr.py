@@ -1,7 +1,6 @@
 """Handle inputs from logstash and pass them to notification modules."""
 
 import toml
-import sys
 import importlib
 import argparse
 
