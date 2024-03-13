@@ -38,36 +38,32 @@ class SSHLog(Log):
 
     def __init__(self, status=None, ipv4=None, port=None, **kwargs):
         super().__init__(**kwargs)
-        self.type = "ssh"
+        self.type = "SSH"
         self.status = status
         self.ipv4 = ipv4
         self.port = port
 
     def get_msg(self):
         """Generate human-readable message for SSH log information."""
-        message_parts = []
+        message_parts = [self.type]
 
         # Add status to message
         if self.status:
-            message_parts.append(f"{self.status} login")
-
+            message_parts.append(f"login {self.status}")
+        else:
+            message_parts.append("authentication activity")
         # Add IPv4 address to message
         if self.ipv4:
             message_parts.append(f"from {self.ipv4}")
-
         # Add port to message
         if self.port:
             message_parts.append(f"on port {self.port}")
-
         # Add port to message
         if self.timestamp:
             message_parts.append(f"at {self.timestamp}")
 
         # Construct final message
-        if message_parts:
-            message = " ".join(message_parts) + "."
-        else:
-            message = "SSH activity detected."
+        message = " ".join(message_parts) + "."
 
         return message
 
