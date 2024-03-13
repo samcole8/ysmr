@@ -30,7 +30,11 @@ def load_config(path):
     """Open config and return object list"""
     with open(path, "r") as f:
         # Create list of enabled Module instances
-        module_configs = [ModuleConfig(**module_config) for module_config in toml.load(f).get('module', []) if module_config.get('enabled', False)]
+        module_configs = [
+            ModuleConfig(**module_config)
+            for module_config in toml.load(f).get('module', [])
+            if module_config.get('enabled', False)
+        ]
     return module_configs
 
 def ysmr(timestamp, status, ipv4, port):
