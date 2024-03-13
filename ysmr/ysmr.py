@@ -94,10 +94,6 @@ def parse():
     # Parse arguments
     args = parser.parse_args()
 
-    # Check if SSH options are provided when --ssh flag is used
-    if args.ssh and (not args.status or not args.ipv4 or not args.port):
-        parser.error("--status, --ipv4, and --port are required with --ssh")
-
     return args.timestamp, args.status, args.ipv4, args.port
 
 if __name__ == "__main__":
