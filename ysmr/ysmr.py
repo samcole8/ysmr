@@ -76,7 +76,7 @@ def parse():
     # Set args
     ssh_arguments = {
         "--ssh": {"action": "store_true",
-                  "help": "enable SSH options"},
+                  "help": "specify SSH log type"},
         "--status": {"type": str,
                      "default": "",
                      "help": "status string (required for SSH)"},
