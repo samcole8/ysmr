@@ -30,7 +30,7 @@ class Log:
 class SSHLog(Log):
     """SSH log child class."""
 
-    def __init__(self, status, ipv4, port, **kwargs):
+    def __init__(self, status=None, ipv4=None, port=None, **kwargs):
         super().__init__(**kwargs)
         self.status = status
         self.ipv4 = ipv4
@@ -38,8 +38,27 @@ class SSHLog(Log):
 
     def get_msg(self):
         """Generate human-readable message for SSH log information."""
-        return (f"{self.timestamp} | {self.status} login from "
-           f"{self.ipv4} on port {self.port}.")
+        message_parts = []
+
+        # Add status to message
+        if self.status:
+            message_parts.append(f"{self.status} login")
+
+        # Add IPv4 address to message
+        if self.ipv4:
+            message_parts.append(f"from {self.ipv4}")
+
+        # Add port to message
+        if self.port:
+            message_parts.append(f"on port {self.port}")
+
+        # Construct final message
+        if message_parts:
+            message = " ".join(message_parts) + "."
+        else:
+            message = "SSH activity detected."
+
+        return message
 
 def load_config(path):
     """Open config and return object list."""
