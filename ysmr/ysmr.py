@@ -46,7 +46,10 @@ def ysmr(timestamp, status, ipv4, port):
     # Run module, pass config & log
     for module_config in module_configs:
         module = importlib.import_module(module_config.name)
-        module.run(module_config, log)
+        try:
+            module.run(module_config, log)
+        except Exception as e:
+            print(f"ERROR: Fatal error occured running {module_config.name} module. Details:\n{e}")
         
 
 if __name__ == "__main__":
