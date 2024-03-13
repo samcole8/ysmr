@@ -3,6 +3,7 @@
 import toml
 import sys
 import importlib
+import argparse
 
 # Relative path to configuration file
 CONFIG_PATH = "ysmr.toml"
@@ -50,7 +51,34 @@ def ysmr(timestamp, status, ipv4, port):
             module.run(module_config, log)
         except Exception as e:
             print(f"ERROR: Exception occured in {module_config.name} module:\n{e}")
-        
+
+def parse():
+    # Create ArgumentParser object
+    parser = argparse.ArgumentParser(description='Process some strings.')
+
+    # Add timestamp argument
+    parser.add_argument("timestamp", type=str,
+                        help="timestamp string")
+
+    # Add flag for SSH options
+    ssh_group = parser.add_argument_group("SSH options")
+    ssh_group.add_argument("--ssh", action="store_true",
+                           help='enable SSH options')
+    ssh_group.add_argument("--status", type=str, default="",
+                           help="status string (required for SSH)")
+    ssh_group.add_argument("--ipv4", type=str, default="",
+                           help="IPv4 address string (required for SSH)")
+    ssh_group.add_argument("--port", type=str, default="",
+                           help="port string (required for SSH)")
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Check if SSH options are provided when --ssh flag is used
+    if args.ssh and (not args.status or not args.ipv4 or not args.port):
+        parser.error("--status, --ipv4, and --port are required with --ssh")
+
+    return args.timestamp, args.status, args.ipv4, args.port
 
 if __name__ == "__main__":
-    ysmr(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    ysmr(*parse())
