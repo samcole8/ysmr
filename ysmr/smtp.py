@@ -6,7 +6,7 @@ def run(settings, log):
     message = f"{log.status} login at {log.timestamp} from {log.ipv4} on port {log.port}."
     msg = MIMEText(message)
     msg["Subject"] = f"{log.status} SSH Login"
-    msg["From"] = settings["from"]
+    msg["From"] = settings["sender"]
 
     # Initiate SSL
     context = ssl.create_default_context()
@@ -14,5 +14,5 @@ def run(settings, log):
     # Login and send email
     with smtplib.SMTP_SSL(settings["server"], settings["port"], context=context) as server:
         server.login(settings["login"], settings["secret"])
-        server.sendmail(settings["from"], settings["to"], msg.as_string())
+        server.sendmail(settings["sender"], settings["recipient"], msg.as_string())
     
