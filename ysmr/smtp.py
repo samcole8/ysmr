@@ -8,8 +8,7 @@ from email.mime.text import MIMEText
 def run(conf, log):
     """Run the email notification process."""
     # Set body
-    msg = MIMEText(f"{log.timestamp} | {log.status} login from "
-           f"{log.ipv4} on port {log.port}.")
+    msg = MIMEText(log.get_msg())
     msg["Subject"] = f"{log.status} SSH Login"
     msg["From"] = conf.sender
 

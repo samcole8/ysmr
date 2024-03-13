@@ -36,6 +36,11 @@ class SSHLog(Log):
         self.ipv4 = ipv4
         self.port = port
 
+    def get_msg(self):
+        """Generate human-readable message for SSH log information."""
+        return (f"{self.timestamp} | {self.status} login from "
+           f"{self.ipv4} on port {self.port}.")
+
 def load_config(path):
     """Open config and return object list."""
     with open(path) as f:
