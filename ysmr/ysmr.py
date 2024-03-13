@@ -2,11 +2,14 @@
 
 import argparse
 import importlib
+import os
+import sys
 
 import toml
 
-# Relative path to configuration file
-CONFIG_PATH = "ysmr.toml"
+# Path to configuration file
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "ysmr.toml")
 
 class ModuleConfig:
     """Module configuration class."""
@@ -97,4 +100,7 @@ def parse():
     return args.timestamp, args.status, args.ipv4, args.port
 
 if __name__ == "__main__":
+    # Add directory containing this script to the Python module search path
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(script_dir)
     ysmr(*parse())
