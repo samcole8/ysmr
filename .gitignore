@@ -1,3 +1,8 @@
+# Ruff stuff
+pyproject.toml
+ruff.toml
+.ruff.toml
+
 # Config files
 ysmr.toml
 
