@@ -1,13 +1,16 @@
 """Handle inputs from logstash and pass them to notification modules."""
 
-import toml
-import importlib
 import argparse
+import importlib
+
+import toml
 
 # Relative path to configuration file
 CONFIG_PATH = "ysmr.toml"
 
 class ModuleConfig:
+    """Module configuration class."""
+
     def __init__(self, name, enabled, **kwargs):
         self.name = name
         self.enabled = enabled
@@ -15,11 +18,15 @@ class ModuleConfig:
             setattr(self, key, value)
 
 class Log:
+    """Template log class."""
+
     def __init__(self, timestamp, **kwargs):
         self.timestamp = timestamp
         self.other = kwargs
 
 class SSHLog(Log):
+    """SSH log child class."""
+
     def __init__(self, status, ipv4, port, **kwargs):
         super().__init__(**kwargs)
         self.status = status
@@ -27,8 +34,8 @@ class SSHLog(Log):
         self.port = port
 
 def load_config(path):
-    """Open config and return object list"""
-    with open(path, "r") as f:
+    """Open config and return object list."""
+    with open(path) as f:
         # Create list of enabled Module instances
         module_configs = [
             ModuleConfig(**module_config)
@@ -49,9 +56,11 @@ def ysmr(timestamp, status, ipv4, port):
         try:
             module.run(module_config, log)
         except Exception as e:
-            print(f"ERROR: Exception occured in {module_config.name} module:\n{e}")
+            print(f"ERROR: Exception occured in {module_config.name} module:"
+                  f"\n{e}")
 
 def parse():
+    """Use argparse to parse command-line arguments."""
     # Create ArgumentParser object
     parser = argparse.ArgumentParser(description='Process some strings.')
 
@@ -64,9 +73,15 @@ def parse():
     # Set args
     ssh_arguments = {
         "--ssh": {"action": "store_true", "help": "enable SSH options"},
-        "--status": {"type": str, "default": "", "help": "status string (required for SSH)"},
-        "--ipv4": {"type": str, "default": "", "help": "IPv4 address string (required for SSH)"},
-        "--port": {"type": str, "default": "", "help": "port string (required for SSH)"}
+        "--status": {"type": str,
+                     "default": "",
+                     "help": "status string (required for SSH)"},
+        "--ipv4": {"type": str,
+                   "default": "",
+                   "help": "IPv4 address string (required for SSH)"},
+        "--port": {"type": str,
+                   "default": "",
+                   "help": "port string (required for SSH)"}
     }
     # Add arguments
     for arg, config in ssh_arguments.items():
