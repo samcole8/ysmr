@@ -59,16 +59,18 @@ def parse():
     parser.add_argument("timestamp", type=str,
                         help="timestamp string")
 
-    # Add flag for SSH options
+    # SSH group
     ssh_group = parser.add_argument_group("SSH options")
-    ssh_group.add_argument("--ssh", action="store_true",
-                           help='enable SSH options')
-    ssh_group.add_argument("--status", type=str, default="",
-                           help="status string (required for SSH)")
-    ssh_group.add_argument("--ipv4", type=str, default="",
-                           help="IPv4 address string (required for SSH)")
-    ssh_group.add_argument("--port", type=str, default="",
-                           help="port string (required for SSH)")
+    # Set args
+    ssh_arguments = {
+        "--ssh": {"action": "store_true", "help": "enable SSH options"},
+        "--status": {"type": str, "default": "", "help": "status string (required for SSH)"},
+        "--ipv4": {"type": str, "default": "", "help": "IPv4 address string (required for SSH)"},
+        "--port": {"type": str, "default": "", "help": "port string (required for SSH)"}
+    }
+    # Add arguments
+    for arg, config in ssh_arguments.items():
+        ssh_group.add_argument(arg, **config)
 
     # Parse arguments
     args = parser.parse_args()
