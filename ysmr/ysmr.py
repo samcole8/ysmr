@@ -49,7 +49,7 @@ def ysmr(timestamp, status, ipv4, port):
         try:
             module.run(module_config, log)
         except Exception as e:
-            print(f"ERROR: Fatal error occured running {module_config.name} module. Details:\n{e}")
+            print(f"ERROR: Exception occured in {module_config.name} module:\n{e}")
         
 
 if __name__ == "__main__":
