@@ -15,7 +15,7 @@ Logstash should be configured to execute the "ysmr.py" script each time a log en
 ```ruby
 output {
   exec {
-    command => "/usr/bin/python3 /ysmr/ysmr/ysmr/ysmr.py %{src_ip} %{src_port} %{login_status}"
+    command => "/usr/bin/python3 ysmr.py %{timestamp} %{login_status} %{src_ip} %{src_port}"
   }
 }
 ```
