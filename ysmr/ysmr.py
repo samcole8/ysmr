@@ -8,7 +8,7 @@ import sys
 import toml
 
 # Path to configuration file
-MODULE_PATH = "/../modules/"
+MODULE_PATH = "modules/"
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            "ysmr.toml")
 
@@ -119,7 +119,7 @@ def ysmr(log):
     """Pass parameters to notification modules."""
     # Add directory containing this script to the Python module search path
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    sys.path.append(script_dir + MODULE_PATH)
+    sys.path.append(script_dir + "/" + MODULE_PATH)
 
     # Load config objects
     config = load_config(CONFIG_PATH)
