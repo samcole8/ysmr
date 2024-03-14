@@ -106,8 +106,8 @@ def ysmr(log):
             except Exception as e:
                 print(f"{module.name}: error: {e}")
         except ModuleNotFoundError:
-            print(f"ysmr.py: error: module {module.name} could not be imported. "
-                  "Is it in the project folder?")
+            print(f"ysmr.py: error: module {module.name} could not be "
+                  "imported. Is it in the project folder?")
 
 def parse():
     """Use argparse to parse command-line arguments.
