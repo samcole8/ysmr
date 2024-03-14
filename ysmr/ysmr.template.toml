@@ -22,7 +22,7 @@ recipient = ""
 
 [[module]]
 name="smtp"
-enabled=true
+enabled=false
 server = ""
 port = ""
 login = ""
