@@ -87,13 +87,16 @@ def ysmr(log):
     # Run module, pass config & log
     for module in config.modules:
         try:
+            # Dynamically import module
             importlib_module = importlib.import_module(module.name)
-            importlib_module.run(module, log)
+            # Catch-all for module exceptions
+            try:
+                importlib_module.run(module, log)
+            except Exception as e:
+                print(f"{module.name}: error: {e}")
         except ModuleNotFoundError:
             print(f"ysmr.py: error: module {module.name} could not be imported. "
                   "Is it in the project folder?")
-        except Exception as e:
-            print(f"{module.name}: error: {e}")
 
 def parse():
     """Use argparse to parse command-line arguments.
