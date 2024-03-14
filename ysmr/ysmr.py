@@ -90,7 +90,7 @@ def ysmr(log):
             importlib_module = importlib.import_module(module.name)
             importlib_module.run(module, log)
         except ModuleNotFoundError:
-            print(f"ysmr.py: error: {module.name} could not be imported. "
+            print(f"ysmr.py: error: module {module.name} could not be imported. "
                   "Is it in the project folder?")
         except Exception as e:
             print(f"{module.name}: error: {e}")
