@@ -117,7 +117,7 @@ def parse():
     # Create parsers
     parser = argparse.ArgumentParser(description='Process arguments.')
     subparsers = parser.add_subparsers(title='functions', dest='subcommand')
-    ssh_parser = subparsers.add_parser('ssh', help='SSH authentication notification')
+    ssh_parser = subparsers.add_parser('ssh', help='SSH notification')
 
     # Optional arguments for SSH
     ssh_parser.add_argument("--timestamp",
