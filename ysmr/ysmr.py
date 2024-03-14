@@ -1,4 +1,4 @@
-"""Handle inputs from logstash and pass them to notification modules."""
+"""Handle inputs and pass them to notification modules."""
 
 import argparse
 import importlib
