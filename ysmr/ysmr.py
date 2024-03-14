@@ -69,15 +69,25 @@ class SSHLog(Log):
 
 def load_config(path):
     """Open config and return object list."""
-    with open(path) as f:
-        # Create config object
-        config = Config()
-        # Create config module objects
-        config.modules = [
-            config.Module(**module)
-            for module in toml.load(f).get('module', [])
-            if module.get('enabled', False)
-        ]
+    try:
+        with open(path) as f:
+            # Create config object
+            config = Config()
+            # Create config module objects
+            try:
+                config.modules = [
+                    config.Module(**module)
+                    for module in toml.load(f).get('module', [])
+                    if module.get('enabled', False)
+                ]
+            except TypeError as e:
+                sys.exit(f"ysmr.py: error: Configuration is invalid:\n{e}")
+    except FileNotFoundError:
+        sys.exit(f"ysmr.py: error: {path} does not exist.")
+        raise
+    except PermissionError:
+        sys.exit(f"ysmr.py: error: Permission denied for {path}.")
+        raise
     return config
 
 def ysmr(log):
