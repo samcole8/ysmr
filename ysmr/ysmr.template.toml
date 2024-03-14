@@ -1,9 +1,5 @@
 # ysmr.toml
 
-# Global configuration settings
-
-module_path = ""
-
 # Define module instances here
 
 [[module]]
