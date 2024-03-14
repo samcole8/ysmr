@@ -93,6 +93,9 @@ def load_config(path):
 
 def ysmr(log):
     """Pass parameters to notification modules."""
+    # Add directory containing this script to the Python module search path
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(script_dir + MODULE_PATH)
     # Load config objects
     config = load_config(CONFIG_PATH)
     # Run module, pass config & log
@@ -154,7 +157,4 @@ def parse():
     return log
 
 if __name__ == "__main__":
-    # Add directory containing this script to the Python module search path
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    sys.path.append(script_dir + MODULE_PATH)
     ysmr(parse())
