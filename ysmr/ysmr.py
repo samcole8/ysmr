@@ -90,7 +90,7 @@ def ysmr(log):
         try:
             importlib_module.run(module, log)
         except Exception as e:
-            print(f"ERROR: Exception occured in {module.name} module:"
+            print(f"ysmr.py: error: Exception occured in {module.name} module:"
                   f"\n{e}")
 
 def parse():
