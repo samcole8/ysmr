@@ -16,12 +16,23 @@ class Config:
     """Config class."""
 
     def __init__(self):
+        """Initialise a new instance of the Config class.
+
+        Initialises the `modules` attribute as an empty list to store
+        dynamically loaded modules.
+        """
         self.modules = []
 
     class Module:
         """Module configuration class."""
 
         def __init__(self, name, enabled, **kwargs):
+            """Initialise a new instance of the Module class.
+
+            Sets required attributes name and enabled, and dynamically
+            assigns any other provided parameters to attributes of the same
+            name.
+            """
             self.name = name
             self.enabled = enabled
             for key, value in kwargs.items():
@@ -31,6 +42,11 @@ class Log:
     """Template log class."""
 
     def __init__(self, timestamp=None, **kwargs):
+        """Initialise a new instance of the Log class.
+
+        Sets timestamp attribute, and adds any unexpected parameters to other
+        dictionary.
+        """
         self.timestamp = timestamp
         self.other = kwargs
 
@@ -38,6 +54,10 @@ class SSHLog(Log):
     """SSH log child class."""
 
     def __init__(self, status=None, ipv4=None, port=None, **kwargs):
+        """Initialise a new instance of the SSHLog child class.
+
+        If provided, assigns expected arguments to the correct attributes.
+        """
         super().__init__(**kwargs)
         self.type = "SSH"
         self.status = status
@@ -48,24 +68,20 @@ class SSHLog(Log):
         """Generate human-readable message for SSH log information."""
         message_parts = [self.type]
 
-        # Add status to message
+        # Dynamically add items to message_parts
         if self.status:
             message_parts.append(f"login {self.status}")
         else:
             message_parts.append("authentication activity")
-        # Add IPv4 address to message
         if self.ipv4:
             message_parts.append(f"from {self.ipv4}")
-        # Add port to message
         if self.port:
             message_parts.append(f"on port {self.port}")
-        # Add port to message
         if self.timestamp:
             message_parts.append(f"at {self.timestamp}")
 
-        # Construct final message
+        # Construct message
         message = " ".join(message_parts) + "."
-
         return message
 
 def load_config(path):
@@ -96,27 +112,28 @@ def ysmr(log):
     # Add directory containing this script to the Python module search path
     script_dir = os.path.dirname(os.path.realpath(__file__))
     sys.path.append(script_dir + MODULE_PATH)
+
     # Load config objects
     config = load_config(CONFIG_PATH)
-    # Run module, pass config & log
+
+    # Run each module call
     for module in config.modules:
         try:
             # Dynamically import module
             importlib_module = importlib.import_module(module.name)
+
             # Catch-all for module exceptions
             try:
                 importlib_module.run(module, log)
             except Exception as e:
                 print(f"{module.name}: error: {e}")
+
         except ModuleNotFoundError:
             print(f"ysmr.py: error: module {module.name} could not be "
                   "imported. Is it in the project folder?")
 
 def parse_arguments():
-    """Use argparse to parse command-line arguments.
-
-    Create log object from CLI arguments.
-    """
+    """Parse CLI arguments into Log instance."""
     # Create parsers
     parser = argparse.ArgumentParser(description='Process arguments.')
     subparsers = parser.add_subparsers(title='functions', dest='subcommand')
@@ -143,9 +160,8 @@ def parse_arguments():
     # Parse arguments
     args = parser.parse_args()
 
-    # Check if subcommand is provided and handle accordingly
     if args.subcommand == 'ssh':
-        # Create SSHLog object using provided arguments
+        # Create SSHLog object using arguments, where provided
         log = SSHLog(timestamp=args.timestamp,
                      status=args.status,
                      ipv4=args.ipv4,
@@ -153,7 +169,6 @@ def parse_arguments():
     else:
         sys.exit("ysmr.py: error: Log type is invalid or not specified")
 
-    # Return log object
     return log
 
 if __name__ == "__main__":
