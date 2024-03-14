@@ -8,6 +8,7 @@ import sys
 import toml
 
 # Path to configuration file
+MODULE_PATH = "/../modules/"
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            "ysmr.toml")
 
@@ -155,5 +156,5 @@ def parse():
 if __name__ == "__main__":
     # Add directory containing this script to the Python module search path
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    sys.path.append(script_dir)
+    sys.path.append(script_dir + MODULE_PATH)
     ysmr(parse())
