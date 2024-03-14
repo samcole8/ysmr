@@ -1,4 +1,12 @@
-"""Twilio SendGrid SMS notification module."""
+"""Twilio SendGrid notification module for ysmr.
+
+This module accepts the log and config objects created by ysmr.
+
+Using parameters provided in the config object, the log data is
+wrapped in an API call and sent to Twilio SendGrid accordingly.
+
+This module is packaged by default with ysmr.
+"""
 
 from twilio.rest import Client
 
