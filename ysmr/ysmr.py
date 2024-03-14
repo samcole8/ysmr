@@ -112,7 +112,7 @@ def ysmr(log):
             print(f"ysmr.py: error: module {module.name} could not be "
                   "imported. Is it in the project folder?")
 
-def parse():
+def parse_arguments():
     """Use argparse to parse command-line arguments.
 
     Create log object from CLI arguments.
@@ -157,4 +157,4 @@ def parse():
     return log
 
 if __name__ == "__main__":
-    ysmr(parse())
+    ysmr(parse_arguments())
