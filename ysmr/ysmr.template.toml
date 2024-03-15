@@ -29,3 +29,11 @@ login = ""
 secret = ""
 recipient = ""
 sender = ""
+
+[[module]]
+name="mongo"
+enabled="false"
+
+[[module]]
+name="slack"
+enabled="false"
