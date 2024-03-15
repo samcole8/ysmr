@@ -48,7 +48,6 @@ class Log:
         dictionary.
         """
         self.timestamp = timestamp
-        self.other = kwargs
 
 class SSHLog(Log):
     """SSH log child class."""
