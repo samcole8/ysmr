@@ -33,6 +33,9 @@ sender = ""
 [[module]]
 name="mongo"
 enabled="false"
+url=""
+db=""
+collection=""
 
 [[module]]
 name="slack"
