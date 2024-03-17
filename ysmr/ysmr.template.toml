@@ -36,7 +36,3 @@ enabled="false"
 url=""
 db=""
 collection=""
-
-[[module]]
-name="slack"
-enabled="false"
