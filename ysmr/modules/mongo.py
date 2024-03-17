@@ -12,7 +12,7 @@ from pymongo import MongoClient
 
 
 def run(conf, log):
-    """Send MongoDB notification."""
+    """Send MongoDB data."""
     # Create document from log data
     document = {}
     for key, value in vars(log).items():
