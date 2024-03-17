@@ -17,7 +17,10 @@ def run(conf, log):
     """Run the email notification process."""
     # Set body
     msg = MIMEText(log.get_msg())
-    msg["Subject"] = f"{log.status} SSH Login"
+    if log.status is None:
+        msg["Subject"] = "SSH activity"
+    else:
+        msg["Subject"] = f"{log.status} SSH Login"
     msg["From"] = conf.sender
 
     # Initiate SSL
