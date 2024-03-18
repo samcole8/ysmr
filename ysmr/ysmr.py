@@ -27,12 +27,8 @@ class Config:
                 loaded from a configuration file.
 
         """
-        # Initialise Config attributes
-        self.modules = []
         # Create Module objects and load into self
-        for module_data in data["module"]:
-            module = self.Module(**module_data)
-            self.modules.append(module)
+        self.modules = [self.Module(**data) for data in data["module"]]
 
 
     class Module:
@@ -61,11 +57,8 @@ class Config:
             # Initialise Module attributes
             self.name = name
             self.enabled = enabled
-            self.instances = []
             # Create Instance objects and load into self
-            for data in instance:
-                instance = self.Instance(**data)
-                self.instances.append(instance)
+            self.instances = [self.Instance(**data) for data in instance]
 
         def is_enabled(self):
             """Return value based on enabled attribute."""
