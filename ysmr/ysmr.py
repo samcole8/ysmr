@@ -16,9 +16,9 @@ class Config:
     """Config class."""
 
     def __init__(self, data):
-        """Initialize new instance of the Config class.
+        """Initialise new instance of the Config class.
 
-        This method initializes the Config object by loading module data
+        This method initialises the Config object by loading module data
         from the provided dictionary and creating Module objects for each
         enabled module.
 
@@ -28,7 +28,9 @@ class Config:
                 loaded from a configuration file.
 
         """
+        # Initialise Config attributes
         self.modules = []
+        # Create Module objects and load into self
         for module_name, module_data in data["modules"].items():
             if module_data["enabled"] is True:
                 module = self.Module(module_name, module_data)
@@ -42,9 +44,9 @@ class Config:
         """
 
         def __init__(self, name, data):
-            """Initialize new instance of the Module class.
+            """Initialise new instance of the Module class.
 
-            This method initializes the Module object by loading instance data
+            This method initialises the Module object by loading instance data
             from the provided dictionary and creating Instance objects for each
             enabled instance.
 
@@ -56,8 +58,10 @@ class Config:
                 typically loaded from a configuration file.
 
             """
-            self.instances = []
+            # Initialise Module attributes
             self.name = name
+            self.instances = []
+            # Create Instance objects and load into self
             for instance_data in data["instance"]:
                 if instance_data["enabled"] is True:
                     instance = self.Instance(**instance_data)
@@ -70,7 +74,7 @@ class Config:
             """
 
             def __init__(self, name, enabled, **kwargs):
-                """Initialize new object from Instance class.
+                """Initialise new object from Instance class.
 
                 Args:
                 ----
@@ -78,11 +82,13 @@ class Config:
 
                     enabled (bool): Currently discarded variable.
 
-                    **kwargs (*): Any options required by module-specific
-                    functions.
+                    **kwargs (*): Any dynamic options required by
+                    module-specific functions.
 
                 """
+                # Initialise static attributes
                 self.name = name
+                # Initialise dynamic attributes
                 for key, value in kwargs.items():
                     setattr(self, key, value)
 
