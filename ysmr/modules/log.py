@@ -8,7 +8,7 @@ and written to a log file.
 This module is packaged by default with ysmr.
 """
 
-def run(settings, log):
+def run(inst, log):
     """Write log message to local filesystem."""
     with open("ysmr.log", "a") as f:
         f.write(log.get_msg())
