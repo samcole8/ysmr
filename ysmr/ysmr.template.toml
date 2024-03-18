@@ -2,54 +2,57 @@
 
 hostname="test"
 
-[modules]
+[[module]]
+name="log"
+enabled=true
 
-    [modules.log]
+    [[module.instance]]
+    name="log1"
     enabled=true
 
-        [[modules.log.instance]]
-        name="log"
-        enabled=true
+[[module]]
+name="tele1"
+enabled=false
 
-    [modules.tele]
+    [[module.instance]]
+    name="tele1"
     enabled=false
+    chat_id=""
+    bot_token=""
 
-        [[modules.tele.instance]]
-        name="tele"
-        enabled=false
-        chat_id=""
-        bot_token=""
+[[module]]
+name="sendgrid"
+enabled=false
 
-    [modules.sendgrid]
+    [[module.instance]]
+    name="sendgrid1"
     enabled=false
+    account_sid = ""
+    auth_token = ""
+    sender = ""
+    recipient = ""
 
-        [[modules.sendgrid.instance]]
-        name="sendgrid"
-        enabled=false
-        account_sid = ""
-        auth_token = ""
-        sender = ""
-        recipient = ""
+[[module]]
+name="smtp"
+enabled=false
 
-    [modules.smtp]
+    [[module.instance]]
+    name="smtp1"
     enabled=false
+    server = ""
+    port = ""
+    login = ""
+    secret = ""
+    recipient = ""
+    sender = ""
 
-        [[modules.smtp.instance]]
-        name="smtp"
-        enabled=false
-        server = ""
-        port = ""
-        login = ""
-        secret = ""
-        recipient = ""
-        sender = ""
+[[module]]
+name="mongo"
+enabled=false
 
-    [modules.mongo]
+    [[module.instance]]
+    name="mongo1"
     enabled=false
-
-        [[modules.mongo.instance]]
-        name="mongo"
-        enabled=false
-        url=""
-        db=""
-        collection=""
+    url=""
+    db=""
+    collection=""

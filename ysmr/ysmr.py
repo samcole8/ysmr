@@ -19,8 +19,7 @@ class Config:
         """Initialise new instance of the Config class.
 
         This method initialises the Config object by loading module data
-        from the provided dictionary and creating Module objects for each
-        enabled module.
+        from the provided dictionary into objects.
 
         Args:
         ----
@@ -31,10 +30,9 @@ class Config:
         # Initialise Config attributes
         self.modules = []
         # Create Module objects and load into self
-        for module_name, module_data in data["modules"].items():
-            if module_data["enabled"] is True:
-                module = self.Module(module_name, module_data)
-                self.modules.append(module)
+        for module_data in data["module"]:
+            module = self.Module(**module_data)
+            self.modules.append(module)
 
 
     class Module:
@@ -43,12 +41,11 @@ class Config:
         Config modules refer to any notification module (SMS, smtp e.t.c.).
         """
 
-        def __init__(self, name, data):
+        def __init__(self, name, enabled, instance, **kwargs):
             """Initialise new instance of the Module class.
 
             This method initialises the Module object by loading instance data
-            from the provided dictionary and creating Instance objects for each
-            enabled instance.
+            from the provided dictionary.
 
             Args:
             ----
@@ -60,12 +57,16 @@ class Config:
             """
             # Initialise Module attributes
             self.name = name
+            self.enabled = enabled
             self.instances = []
             # Create Instance objects and load into self
-            for instance_data in data["instance"]:
-                if instance_data["enabled"] is True:
-                    instance = self.Instance(**instance_data)
-                    self.instances.append(instance)
+            for data in instance:
+                instance = self.Instance(**data)
+                self.instances.append(instance)
+
+        def is_enabled(self):
+            """Return value based on enabled attribute."""
+            return self.enabled
 
         class Instance:
             """Instance configuration class.
@@ -91,6 +92,10 @@ class Config:
                 # Initialise dynamic attributes
                 for key, value in kwargs.items():
                     setattr(self, key, value)
+
+            def is_enabled(self):
+                """Return value based on enabled attribute."""
+                return self.enabled
 
 class Log:
     """Template log class."""
