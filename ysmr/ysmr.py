@@ -16,10 +16,17 @@ class Config:
     """Config class."""
 
     def __init__(self, data):
-        """Initialise a new instance of the Config class.
+        """Initialize new instance of the Config class.
 
-        Initialises the `modules` attribute as an empty list to store
-        dynamically loaded modules.
+        This method initializes the Config object by loading module data
+        from the provided dictionary and creating Module objects for each
+        enabled module.
+
+        Args:
+        ----
+            data (dict): Dictionary containing configuration data, typically
+                loaded from a configuration file.
+
         """
         self.modules = []
         for module_name, module_data in data["modules"].items():
@@ -35,10 +42,19 @@ class Config:
         """
 
         def __init__(self, name, data):
-            """Initialise a new instance of the Config class.
+            """Initialize new instance of the Module class.
 
-            Initialises the `instance` attribute as an empty list to store
-            dynamically loaded instances.
+            This method initializes the Module object by loading instance data
+            from the provided dictionary and creating Instance objects for each
+            enabled instance.
+
+            Args:
+            ----
+                name (string): Name of the module.
+
+                data (dict): Dictionary containing configuration data,
+                typically loaded from a configuration file.
+
             """
             self.instances = []
             self.name = name
@@ -54,11 +70,17 @@ class Config:
             """
 
             def __init__(self, name, enabled, **kwargs):
-                """Initialise a new instance of the Module class.
+                """Initialize new object from Instance class.
 
-                Sets required attributes name and enabled, and dynamically
-                assigns any other provided parameters to attributes of the same
-                name.
+                Args:
+                ----
+                    name (string): Name of the module.
+
+                    enabled (bool): Currently discarded variable.
+
+                    **kwargs (*): Any options required by module-specific
+                    functions.
+
                 """
                 self.name = name
                 for key, value in kwargs.items():
