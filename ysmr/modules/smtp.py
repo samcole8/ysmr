@@ -1,8 +1,8 @@
 """SMTP notification module for ysmr.
 
-This module accepts the log and instig objects created by ysmr.
+This module accepts the log and instance objects created by ysmr.
 
-Using parameters provided in the instig object, the log data is
+Using parameters provided in the instance object, the log data is
 wrapped in an API call and sent to an SMTP server.
 
 This module is packaged by default with ysmr.
