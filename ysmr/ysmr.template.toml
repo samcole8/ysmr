@@ -1,38 +1,55 @@
 # ysmr.toml
 
-# Define module instances here
+hostname="test"
 
-[[module]]
-name="log"
-enabled="true"
+[modules]
 
-[[module]]
-name="tele"
-enabled=false
-chat_id=""
-bot_token=""
+    [modules.log]
+    enabled=true
 
-[[module]]
-name="sendgrid"
-enabled=false
-account_sid = ""
-auth_token = ""
-sender = ""
-recipient = ""
+        [[modules.log.instance]]
+        name="log"
+        enabled=true
 
-[[module]]
-name="smtp"
-enabled=false
-server = ""
-port = ""
-login = ""
-secret = ""
-recipient = ""
-sender = ""
+    [modules.tele]
+    enabled=false
 
-[[module]]
-name="mongo"
-enabled="false"
-url=""
-db=""
-collection=""
+        [[modules.tele.instance]]
+        name="tele"
+        enabled=false
+        chat_id=""
+        bot_token=""
+
+    [modules.sendgrid]
+    enabled=false
+
+        [[modules.sendgrid.instance]]
+        name="sendgrid"
+        enabled=false
+        account_sid = ""
+        auth_token = ""
+        sender = ""
+        recipient = ""
+
+    [modules.smtp]
+    enabled=false
+
+        [[modules.smtp.instance]]
+        name="smtp"
+        enabled=false
+        server = ""
+        port = ""
+        login = ""
+        secret = ""
+        recipient = ""
+        sender = ""
+
+    [modules.mongo]
+    enabled=false
+
+        [[modules.mongo.instance]]
+        name="mongo"
+        enabled=false
+        url=""
+        db=""
+        collection=""

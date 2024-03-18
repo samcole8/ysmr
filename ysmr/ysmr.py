@@ -15,28 +15,54 @@ CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 class Config:
     """Config class."""
 
-    def __init__(self):
+    def __init__(self, data):
         """Initialise a new instance of the Config class.
 
         Initialises the `modules` attribute as an empty list to store
         dynamically loaded modules.
         """
         self.modules = []
+        for module_name, module_data in data["modules"].items():
+            if module_data["enabled"] is True:
+                module = self.Module(module_name, module_data)
+                self.modules.append(module)
+
 
     class Module:
-        """Module configuration class."""
+        """Module configuration class.
 
-        def __init__(self, name, enabled, **kwargs):
-            """Initialise a new instance of the Module class.
+        Config modules refer to any notification module (SMS, smtp e.t.c.).
+        """
 
-            Sets required attributes name and enabled, and dynamically
-            assigns any other provided parameters to attributes of the same
-            name.
+        def __init__(self, name, data):
+            """Initialise a new instance of the Config class.
+
+            Initialises the `instance` attribute as an empty list to store
+            dynamically loaded instances.
             """
+            self.instances = []
             self.name = name
-            self.enabled = enabled
-            for key, value in kwargs.items():
-                setattr(self, key, value)
+            for instance_data in data["instance"]:
+                if instance_data["enabled"] is True:
+                    instance = self.Instance(**instance_data)
+                    self.instances.append(instance)
+
+        class Instance:
+            """Instance configuration class.
+
+            Instances are individual accounts or notification endpoints.
+            """
+
+            def __init__(self, name, enabled, **kwargs):
+                """Initialise a new instance of the Module class.
+
+                Sets required attributes name and enabled, and dynamically
+                assigns any other provided parameters to attributes of the same
+                name.
+                """
+                self.name = name
+                for key, value in kwargs.items():
+                    setattr(self, key, value)
 
 class Log:
     """Template log class."""
@@ -96,16 +122,10 @@ def load_config(path):
             sys.exit(f"ysmr.py: error: Permission denied for {path}.")
         return toml_data
 
-    def create_object(toml_data):
+    def create_object(config_data):
         # Create config object
-        config = Config()
-        # Create config module objects
         try:
-            config.modules = [
-                config.Module(**module)
-                for module in toml_data.get('module', [])
-                if module.get('enabled', False)
-            ]
+            config = Config(config_data)
         except TypeError as e:
             sys.exit(f"ysmr.py: error: Configuration is invalid:\n{e}")
         return config
@@ -122,18 +142,19 @@ def ysmr(log):
 
     # Load config objects
     config = load_config(CONFIG_PATH)
-
-    # Run each module call
+    # Run each module
     for module in config.modules:
         try:
             # Dynamically import module
+            print(module.name)
             importlib_module = importlib.import_module(module.name)
-
-            # Catch-all for module exceptions
-            try:
-                importlib_module.run(module, log)
-            except Exception as e:
-                print(f"{module.name}: error: {e}")
+            # Run each instance
+            for instance in module.instances:
+                # Catch-all for module exceptions
+                try:
+                    importlib_module.run(instance, log)
+                except Exception as e:
+                    print(f"{module.name}: error: {e}")
 
         except ModuleNotFoundError:
             print(f"ysmr.py: error: module {module.name} could not be "
