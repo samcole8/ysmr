@@ -51,8 +51,11 @@ class Config:
             ----
                 name (string): Name of the module.
 
-                data (dict): Dictionary containing configuration data,
-                typically loaded from a configuration file.
+                enabled (bool): Is the module enabled?
+
+                instance (dict): Instance data from configuration file.
+
+                **kwargs (*): Additional user-defined parameters.
 
             """
             # Initialise Module attributes
