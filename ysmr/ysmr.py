@@ -148,8 +148,11 @@ def load_config(path):
         # Create config object
         try:
             config = Config(config_data)
-        except (TypeError, KeyError) as e:
+        except (TypeError) as e:
             sys.exit(f"ysmr.py: error: Configuration is invalid:\n{e}")
+        except (KeyError) as e:
+            sys.exit(f"ysmr.py: error: KeyError occured when loading"
+            f" configuration:\nKey:{e}.")
         return config
 
     toml_data = read_file(path)
