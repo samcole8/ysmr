@@ -84,7 +84,7 @@ class Config:
                 ----
                     name (string): Name of the module.
 
-                    enabled (bool): Currently discarded variable.
+                    enabled (bool): Is instance enabled?
 
                     **kwargs (*): Any dynamic options required by
                     module-specific functions.
@@ -92,6 +92,7 @@ class Config:
                 """
                 # Initialise static attributes
                 self.name = name
+                self.enabled = enabled
                 # Initialise dynamic attributes
                 for key, value in kwargs.items():
                     setattr(self, key, value)
@@ -181,23 +182,24 @@ def ysmr(log):
 
     # Load config objects
     config = load_config(CONFIG_PATH)
+
     # Run each module
     for module in config.modules:
-        try:
-            # Dynamically import module
-            print(module.name)
-            importlib_module = importlib.import_module(module.name)
-            # Run each instance
-            for instance in module.instances:
-                # Catch-all for module exceptions
-                try:
-                    importlib_module.run(instance, log)
-                except Exception as e:
-                    print(f"{module.name}: error: {e}")
-
-        except ModuleNotFoundError:
-            print(f"ysmr.py: error: module {module.name} could not be "
-                  "imported. Is it in the project folder?")
+        if module.is_enabled():
+            try:
+                # Dynamically import module
+                importlib_module = importlib.import_module(module.name)
+                # Run each instance
+                for instance in module.instances:
+                    if instance.is_enabled():
+                        # Catch-all for module exceptions
+                        try:
+                            importlib_module.run(instance, log)
+                        except Exception as e:
+                            print(f"{module.name}: error: {e}")
+            except ModuleNotFoundError:
+                print(f"ysmr.py: error: module {module.name} could not be "
+                    "imported. Is it in the project folder?")
 
 def parse_arguments():
     """Parse CLI arguments into Log instance."""
