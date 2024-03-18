@@ -148,7 +148,7 @@ def load_config(path):
         # Create config object
         try:
             config = Config(config_data)
-        except TypeError as e:
+        except (TypeError, KeyError) as e:
             sys.exit(f"ysmr.py: error: Configuration is invalid:\n{e}")
         return config
 
