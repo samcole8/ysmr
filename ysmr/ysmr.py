@@ -1,6 +1,7 @@
 """Handle inputs and pass them to notification modules."""
 
 import argparse
+import importlib
 import os
 import sys
 
@@ -101,8 +102,10 @@ def ysmr(log):
     config = load_config(CONFIG_PATH)
 
     # Run each module
-    for module in config.modules:
-        print(module)
+    for module_config in config.modules:
+        module = importlib.import_module(f"modules.{module_config['name']}")
+        handler = module.Mongo(log, module_config)
+        handler.send()
 
 def parse_arguments():
     """Parse CLI arguments into Log instance."""
