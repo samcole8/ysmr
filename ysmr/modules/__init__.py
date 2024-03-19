@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 
 class Module:
-    """Parent Module class to be inherited."""
+    """Module superclass."""
 
     def __init__(self, log, conf):
         """Initialise Module class."""
