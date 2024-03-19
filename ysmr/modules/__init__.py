@@ -7,14 +7,16 @@ from dataclasses import dataclass
 class Module:
     """Module superclass."""
 
-    def __init__(self, log, instances):
+    def __init__(self, name, enabled, log, instance):
         """Initialise Module class."""
+        self.name = name
+        self.enabled = enabled
         self.log = log
         # Create Instance objects from conf
         self.instances = [
             self.Instance(**instance)
-            for instance in instances
-            if instance.get("enabled")
+            for instance in instance
+            if instance["enabled"]
         ]
 
     @dataclass
@@ -27,7 +29,7 @@ class Module:
         """Wrap notification code in error check."""
         for instance in self.instances:
             try:
-                instance.go(self.log)
+                self.go(instance)
             except AttributeError as e:
                 print(f"Check YourModule.send() for errors: {e}")
             except Exception as e:

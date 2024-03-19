@@ -16,54 +16,8 @@ class Config:
     """Config class."""
 
     def __init__(self, data):
-        """Initialise new instance of the Config class.
-
-        This method initialises the Config object by loading module data
-        from the provided dictionary into objects.
-
-        Args:
-        ----
-            data (dict): Dictionary containing configuration data, typically
-                loaded from a configuration file.
-
-        """
-        # Create Module objects and load into self
-        self.modules = [self.Module(**data) for data in data["module"]]
-
-    class Module:
-        """Module configuration class.
-
-        Config modules refer to any notification module (SMS, smtp e.t.c.).
-        """
-
-        def __init__(self, name, enabled, instance, **kwargs):
-            """Initialise new instance of the Module class.
-
-            This method initialises the Module object by loading instance data
-            from the provided dictionary.
-
-            Args:
-            ----
-                name (string): Name of the module.
-
-                enabled (bool): Is the module enabled?
-
-                instance (dict): Instance data from configuration file.
-
-                **kwargs (*): Additional user-defined parameters.
-
-            """
-            # Initialise Module attributes
-            self.name = name
-            self.enabled = enabled
-            self.instances = instance
-            # Initialise dynamic attributes
-            for key, value in kwargs.items():
-                setattr(self, key, value)
-
-        def is_enabled(self):
-            """Return value based on enabled attribute."""
-            return self.enabled
+        """Initialise new instance of the Config class."""
+        self.modules = list(data["module"])
 
 class Log:
     """Template log class."""
@@ -149,9 +103,9 @@ def ysmr(log):
 
     # Run each module
     for module_config in config.modules:
-        handler = importlib.import_module(f"modules.{module_config.name}")
-        module = handler.Mongo(log, module_config.instances)
-        module.notify()
+        module = importlib.import_module(f"modules.{module_config['name']}")
+        handler = module.Mongo(log=log, **module_config)
+        handler.notify()
 
 def parse_arguments():
     """Parse CLI arguments into Log instance."""
