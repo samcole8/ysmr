@@ -12,7 +12,7 @@ class MyModule(Module):
     This class can store attributes and send methods for custom modules. You
     can rename it.
 
-    It must contain at least an `Instance` class and `send` method, as below.
+    It must contain at least an `Instance` class and `go` method, as below.
     """
 
     @dataclass
@@ -24,7 +24,7 @@ class MyModule(Module):
         my_attribute_2: int
         my_attribute_3: bool
 
-    def send(self):
-        """Deposit/send data in the specified method."""
-        # Add your notification code here
-        pass
+        def go(self):
+            """Deposit/send data in the specified method."""
+            # Add your notification code here
+            print(self.my_attribute_1)
