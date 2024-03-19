@@ -16,7 +16,7 @@ class Config:
 
     def __init__(self, data):
         """Initialise new instance of the Config class."""
-        self.modules = [data for data in data["module"]]
+        self.modules = list(data["module"])
 
 class Log:
     """Template log class."""
