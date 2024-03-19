@@ -14,6 +14,7 @@ class Module:
         self.instances = [
             self.Instance(**inst_data)
             for inst_data in conf["instance"]
+            if inst_data.get("enabled")
         ]
 
     @dataclass
