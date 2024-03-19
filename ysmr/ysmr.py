@@ -1,7 +1,6 @@
 """Handle inputs and pass them to notification modules."""
 
 import argparse
-import importlib
 import os
 import sys
 
@@ -16,83 +15,8 @@ class Config:
     """Config class."""
 
     def __init__(self, data):
-        """Initialise new instance of the Config class.
-
-        This method initialises the Config object by loading module data
-        from the provided dictionary into objects.
-
-        Args:
-        ----
-            data (dict): Dictionary containing configuration data, typically
-                loaded from a configuration file.
-
-        """
-        # Create Module objects and load into self
-        self.modules = [self.Module(**data) for data in data["module"]]
-
-
-    class Module:
-        """Module configuration class.
-
-        Config modules refer to any notification module (SMS, smtp e.t.c.).
-        """
-
-        def __init__(self, name, enabled, instance, **kwargs):
-            """Initialise new instance of the Module class.
-
-            This method initialises the Module object by loading instance data
-            from the provided dictionary.
-
-            Args:
-            ----
-                name (string): Name of the module.
-
-                enabled (bool): Is the module enabled?
-
-                instance (dict): Instance data from configuration file.
-
-                **kwargs (*): Additional user-defined parameters.
-
-            """
-            # Initialise Module attributes
-            self.name = name
-            self.enabled = enabled
-            # Create Instance objects and load into self
-            self.instances = [self.Instance(**data) for data in instance]
-
-        def is_enabled(self):
-            """Return value based on enabled attribute."""
-            return self.enabled
-
-        class Instance:
-            """Instance configuration class.
-
-            Instances are individual accounts or notification endpoints.
-            """
-
-            def __init__(self, name, enabled, **kwargs):
-                """Initialise new object from Instance class.
-
-                Args:
-                ----
-                    name (string): Name of the module.
-
-                    enabled (bool): Is instance enabled?
-
-                    **kwargs (*): Any dynamic options required by
-                    module-specific functions.
-
-                """
-                # Initialise static attributes
-                self.name = name
-                self.enabled = enabled
-                # Initialise dynamic attributes
-                for key, value in kwargs.items():
-                    setattr(self, key, value)
-
-            def is_enabled(self):
-                """Return value based on enabled attribute."""
-                return self.enabled
+        """Initialise new instance of the Config class."""
+        self.modules = [data for data in data["module"]]
 
 class Log:
     """Template log class."""
@@ -178,21 +102,7 @@ def ysmr(log):
 
     # Run each module
     for module in config.modules:
-        if module.is_enabled():
-            try:
-                # Dynamically import module
-                importlib_module = importlib.import_module(module.name)
-                # Run each instance
-                for instance in module.instances:
-                    if instance.is_enabled():
-                        # Catch-all for module exceptions
-                        try:
-                            importlib_module.run(instance, log)
-                        except Exception as e:
-                            print(f"{module.name}: error: {e}")
-            except ModuleNotFoundError:
-                print(f"ysmr.py: error: module {module.name} could not be "
-                    "imported. Is it in the project folder?")
+        print(module)
 
 def parse_arguments():
     """Parse CLI arguments into Log instance."""
