@@ -1,24 +1,32 @@
-"""MongoDB notification module for ysmr.
-
-This module accepts the log and instance objects created by ysmr.
-
-Using API parameters provided in the instance object, the log data is
-wrapped in an API call and sent to MongoDB accordingly.
+"""Mongo (MongoDB) module for ysmr.
 
 This module is packaged by default with ysmr.
 """
 
 from pymongo import MongoClient
 
+from . import Module, dataclass
 
-def run(inst, log):
-    """Send MongoDB data."""
-    # Create document from log data
-    document = {}
-    for key, value in vars(log).items():
-        document[key] = value
-    # Open MongoDB connection and post data
-    with MongoClient(inst.url) as client:
-        db = client[inst.db]
-        collection = db[inst.collection]
-        collection.insert_one(document)
+
+class Mongo(Module):
+
+    @dataclass
+    class Instance(Module.Instance):
+        name: str
+        enabled: bool
+        url: str
+        db: str
+        collection: str
+
+        def go(self, log):
+            """Send MongoDB data."""
+            # Create document from log data
+            document = {}
+            for key, value in vars(log).items():
+                document[key] = value
+
+            # Open MongoDB connection and post data
+            with MongoClient(self.url) as client:
+                db = client[self.db]
+                collection = db[self.collection]
+                print(collection.insert_one(document))
