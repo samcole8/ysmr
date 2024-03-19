@@ -24,7 +24,8 @@ class MyModule(Module):
         my_attribute_2: int
         my_attribute_3: bool
 
-        def go(self):
+        def go(self, log):
             """Deposit/send data in the specified method."""
             # Add your notification code here
             print(self.my_attribute_1)
+            print(log.ipv4)
