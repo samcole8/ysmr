@@ -56,8 +56,8 @@ class SSHLog(Log):
         message = " ".join(message_parts) + "."
         return message
 
-def load_config(path):
-    """Open config and return object list."""
+def load_toml(path):
+    """Open TOML file and return dictionary object."""
     try:
         with open(path) as f:
             toml_data = toml.load(f)
