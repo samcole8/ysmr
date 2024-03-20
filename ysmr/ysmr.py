@@ -58,31 +58,14 @@ class SSHLog(Log):
 
 def load_config(path):
     """Open config and return object list."""
-
-    def read_file(path):
-        try:
-            with open(path) as f:
-                toml_data = toml.load(f)
-        except FileNotFoundError:
-            sys.exit(f"ysmr.py: error: {path} does not exist.")
-        except PermissionError:
-            sys.exit(f"ysmr.py: error: Permission denied for {path}.")
-        return toml_data
-
-    def create_object(config_data):
-        # Create config object
-        try:
-            config = Config(config_data)
-        except (TypeError) as e:
-            sys.exit(f"ysmr.py: error: Configuration is invalid:\n{e}")
-        except (KeyError) as e:
-            sys.exit(f"ysmr.py: error: KeyError occured when loading"
-            f" configuration:\nKey:{e}.")
-        return config
-
-    toml_data = read_file(path)
-    config = create_object(toml_data)
-    return config
+    try:
+        with open(path) as f:
+            toml_data = toml.load(f)
+    except FileNotFoundError:
+        sys.exit(f"ysmr.py: error: {path} does not exist.")
+    except PermissionError:
+        sys.exit(f"ysmr.py: error: Permission denied for {path}.")
+    return toml_data
 
 def ysmr(log):
     pass
