@@ -1,7 +1,6 @@
 """Handle inputs and pass them to notification modules."""
 
 import argparse
-import importlib
 import os
 import sys
 
@@ -11,88 +10,6 @@ import toml
 MODULE_PATH = "modules/"
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            "ysmr.toml")
-
-class Config:
-    """Config class."""
-
-    def __init__(self, data):
-        """Initialise new instance of the Config class.
-
-        This method initialises the Config object by loading module data
-        from the provided dictionary into objects.
-
-        Args:
-        ----
-            data (dict): Dictionary containing configuration data, typically
-                loaded from a configuration file.
-
-        """
-        # Create Module objects and load into self
-        self.modules = [self.Module(**data) for data in data["module"]]
-
-
-    class Module:
-        """Module configuration class.
-
-        Config modules refer to any notification module (SMS, smtp e.t.c.).
-        """
-
-        def __init__(self, name, enabled, instance, **kwargs):
-            """Initialise new instance of the Module class.
-
-            This method initialises the Module object by loading instance data
-            from the provided dictionary.
-
-            Args:
-            ----
-                name (string): Name of the module.
-
-                enabled (bool): Is the module enabled?
-
-                instance (dict): Instance data from configuration file.
-
-                **kwargs (*): Additional user-defined parameters.
-
-            """
-            # Initialise Module attributes
-            self.name = name
-            self.enabled = enabled
-            # Create Instance objects and load into self
-            self.instances = [self.Instance(**data) for data in instance]
-
-        def is_enabled(self):
-            """Return value based on enabled attribute."""
-            return self.enabled
-
-        class Instance:
-            """Instance configuration class.
-
-            Instances are individual accounts or notification endpoints.
-            """
-
-            def __init__(self, name, enabled, **kwargs):
-                """Initialise new object from Instance class.
-
-                Args:
-                ----
-                    name (string): Name of the module.
-
-                    enabled (bool): Is instance enabled?
-
-                    **kwargs (*): Any dynamic options required by
-                    module-specific functions.
-
-                """
-                # Initialise static attributes
-                self.name = name
-                self.enabled = enabled
-                # Initialise dynamic attributes
-                for key, value in kwargs.items():
-                    setattr(self, key, value)
-
-            def is_enabled(self):
-                """Return value based on enabled attribute."""
-                return self.enabled
 
 class Log:
     """Template log class."""
