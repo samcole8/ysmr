@@ -68,6 +68,7 @@ def load_toml(path):
     return toml_data
 
 def ysmr(log):
+    config = load_toml(CONFIG_PATH)
     pass
 
 def parse_arguments():
