@@ -1,58 +1,15 @@
-# ysmr.toml
+[ysmr]
 
-hostname="test"
+[plugins]
 
-[[module]]
-name="log"
-enabled=true
+    [plugins.Log]
 
-    [[module.instance]]
-    name="log1"
-    enabled=true
+        [plugins.Log.options]
 
-[[module]]
-name="tele1"
-enabled=false
+            enabled=true
 
-    [[module.instance]]
-    name="tele1"
-    enabled=false
-    chat_id=""
-    bot_token=""
+        [plugins.Log.endpoints]
 
-[[module]]
-name="sendgrid"
-enabled=false
+            [plugins.Log.endpoints.log1]
 
-    [[module.instance]]
-    name="sendgrid1"
-    enabled=false
-    account_sid = ""
-    auth_token = ""
-    sender = ""
-    recipient = ""
-
-[[module]]
-name="smtp"
-enabled=false
-
-    [[module.instance]]
-    name="smtp1"
-    enabled=false
-    server = ""
-    port = ""
-    login = ""
-    secret = ""
-    recipient = ""
-    sender = ""
-
-[[module]]
-name="mongo"
-enabled=false
-
-    [[module.instance]]
-    name="mongo1"
-    enabled=false
-    url=""
-    db=""
-    collection=""
+                path=""
