@@ -168,31 +168,7 @@ def load_config(path):
     return config
 
 def ysmr(log):
-    """Pass parameters to notification modules."""
-    # Add directory containing this script to the Python module search path
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    sys.path.append(script_dir + "/" + MODULE_PATH)
-
-    # Load config objects
-    config = load_config(CONFIG_PATH)
-
-    # Run each module
-    for module in config.modules:
-        if module.is_enabled():
-            try:
-                # Dynamically import module
-                importlib_module = importlib.import_module(module.name)
-                # Run each instance
-                for instance in module.instances:
-                    if instance.is_enabled():
-                        # Catch-all for module exceptions
-                        try:
-                            importlib_module.run(instance, log)
-                        except Exception as e:
-                            print(f"{module.name}: error: {e}")
-            except ModuleNotFoundError:
-                print(f"ysmr.py: error: module {module.name} could not be "
-                    "imported. Is it in the project folder?")
+    pass
 
 def parse_arguments():
     """Parse CLI arguments into Log instance."""
