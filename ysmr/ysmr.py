@@ -174,7 +174,11 @@ def ysmr(log):
     sys.path.append(script_dir + "/" + MODULE_PATH)
 
     # Load config objects
-    config = load_config(CONFIG_PATH)
+    try:
+        config = load_config(CONFIG_PATH)
+    except toml.TomlDecodeError as e:
+        print(f"ysmr.py: error: Invalid Toml syntax in config:\n{e}")
+        sys.exit()
 
     # Run each module
     for module in config.modules:
